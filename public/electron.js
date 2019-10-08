@@ -16,7 +16,6 @@ function createWindow() {
         slashes: true,
       });
   mainWindow = new BrowserWindow();
-  mainWindow.show();
 
   mainWindow.loadURL(startUrl);
   process.env.DEV && mainWindow.webContents.openDevTools();
