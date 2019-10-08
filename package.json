@@ -8,11 +8,13 @@
     "react-scripts": "3.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "react-start": "BROWSER=NONE react-scripts start",
+    "electron-start": "DEV=1 electron .",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "main": "public/electron.js",
   "eslintConfig": {
     "extends": "react-app"
   },
@@ -27,5 +29,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "electron": "^6.0.11"
   }
 }
