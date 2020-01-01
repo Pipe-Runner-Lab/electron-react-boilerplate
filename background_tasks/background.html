@@ -1,0 +1,13 @@
+<script>
+	const { PythonShell } = require('python-shell');
+	const { ipcRenderer } = require('electron');
+	const path = require('path');
+
+	let pyshell = new PythonShell(path.join(__dirname, '/../scripts/factorial.py'), {
+		pythonPath: 'python3',
+	});
+
+	pyshell.on('message', function(results) {
+		ipcRenderer.send('MESSAGE_FROM_BACKGROUND', { message: results });
+	});
+</script>
