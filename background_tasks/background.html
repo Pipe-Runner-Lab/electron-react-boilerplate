@@ -3,11 +3,17 @@
 	const { ipcRenderer } = require('electron');
 	const path = require('path');
 
-	let pyshell = new PythonShell(path.join(__dirname, '/../scripts/factorial.py'), {
-		pythonPath: 'python3',
+	ipcRenderer.on('START_PROCESSING', (event, args) => {
+		const { data } = args;
+		let pyshell = new PythonShell(path.join(__dirname, '/../scripts/factorial.py'), {
+			pythonPath: 'python3',
+			args: [data]
+		});
+
+		pyshell.on('message', function(results) {
+			ipcRenderer.send('MESSAGE_FROM_BACKGROUND', { message: results });
+		});
 	});
 
-	pyshell.on('message', function(results) {
-		ipcRenderer.send('MESSAGE_FROM_BACKGROUND', { message: results });
-	});
+	ipcRenderer.send('BACKGROUND_READY');
 </script>
