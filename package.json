@@ -1,31 +1,123 @@
 {
-  "name": "electron-react-boilerplate",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "react-scripts": "3.2.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+    "name": "f-cal",
+    "description": "A desktop interface for the Pocket Science Lab open-harware device",
+    "version": "2.1.0",
+    "private": true,
+    "dependencies": {
+        "@material-ui/core": "^4.10.2",
+        "@material-ui/icons": "^4.9.1",
+        "chokidar": "^3.0.1",
+        "electron-load-balancer": "^3.0.0",
+        "electron-log": "^3.0.5",
+        "python-shell": "^1.0.7",
+        "react": "^16.8.6",
+        "react-dom": "^16.8.6",
+        "react-scripts": "2.1.8"
+    },
+    "scripts": {
+        "react-start": "BROWSER=NONE react-scripts start",
+        "electron-start": "DEV=1 electron .",
+        "start": "concurrently 'npm run react-start' 'wait-on http://localhost:3000/ && npm run electron-start'",
+        "react-build": "react-scripts build",
+        "pack": "electron-builder --dir -c.extraMetadata.main=build/electron.js",
+        "electron-build-linux": "electron-builder --linux -c.extraMetadata.main=build/electron.js",
+        "electron-build-windows": "electron-builder --win -c.extraMetadata.main=build/electron.js",
+        "electron-build-mac": "electron-builder --mac -c.extraMetadata.main=build/electron.js",
+        "build-linux": "npm run react-build && npm run electron-build-linux",
+        "build-windows": "npm run react-build && npm run electron-build-windows",
+        "build-mac": "npm run react-build && npm run electron-build-mac",
+        "build": "npm run react-build && npm run electron-build-linux && npm run electron-build-windows & npm run electron-build-mac",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx,json,css,md}": [
+            "eslint --fix src",
+            "git add"
+        ]
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "homepage": "./",
+    "main": "public/electron.js",
+    "browserslist": [
+        ">0.2%",
+        "not dead",
+        "not ie <= 11",
+        "not op_mini all"
     ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "devDependencies": {
+        "babel-eslint": "9.0.0",
+        "concurrently": "^5.0.0",
+        "devtron": "^1.4.0",
+        "electron": "^9.0.4",
+        "electron-builder": "^21.1.5",
+        "electron-devtools-installer": "^3.0.0",
+        "enzyme": "^3.9.0",
+        "enzyme-adapter-react-16": "^1.12.1",
+        "eslint": "5.12.0",
+        "eslint-config-prettier": "^4.1.0",
+        "eslint-plugin-babel": "^5.3.0",
+        "eslint-plugin-import": "^2.17.2",
+        "eslint-plugin-jsx": "0.0.2",
+        "eslint-plugin-jsx-a11y": "^6.2.1",
+        "eslint-plugin-prettier": "^3.0.1",
+        "eslint-plugin-react": "^7.20.0",
+        "husky": "^1.3.1",
+        "lint-staged": "^8.1.5",
+        "prettier": "^1.17.0",
+        "wait-on": "^3.2.0"
+    },
+    "author": {
+        "name": "Factorial Calculator",
+        "email": "aakashs.mallik.cse15@iitbhu.ac.in",
+        "url": "https://github.com/AakashMallik"
+    },
+    "build": {
+        "appId": "Factorial Calculator",
+        "productName": "F-Cal",
+        "copyright": "Copyright © 2019-2020 Mr. Mallik",
+        "asar": false,
+        "linux": {
+            "target": [
+                "deb",
+                "snap"
+            ],
+            "category": "Utility"
+        },
+        "snap": {
+            "confinement": "classic"
+        },
+        "win": {
+            "target": [
+                "nsis"
+            ],
+            "legalTrademarks": "Copyright © 2019-2020 Mr. Mallik",
+            "signingHashAlgorithms": [
+                "sha1",
+                "sha256"
+            ]
+        },
+        "mac": {
+            "category": "public.app-category.education",
+            "target": [
+                "default"
+            ]
+        },
+        "nsis": {
+            "oneClick": true
+        },
+        "files": [
+            "build/**/*",
+            "node_modules/**/*",
+            "utils/**/*",
+            "scripts/**/*",
+            "background_tasks/**/*"
+        ],
+        "directories": {
+            "buildResources": "assets"
+        },
+        "extends": null
+    }
 }
