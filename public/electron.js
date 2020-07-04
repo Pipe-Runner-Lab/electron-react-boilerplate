@@ -74,20 +74,20 @@ app.on('activate', () => {
 
 /* ----------------------------------- Custom code starts here ------------------------------------- */
 
-// loadBalancer.register(
-//   ipcMain,
-//   {
-//     linker: '/background_tasks/linker.html',
-//     playback: '/background_tasks/playback.html',
-//   },
-//   // Set to true to unhide the window, useful for IPC debugging
-//   { debug: false },
-// );
+// 1. Register background tasks (the keys will be used for reference later)
+loadBalancer.register(
+  ipcMain,
+  {
+    preemptive_loop: '/background_tasks/preemptive_loop.html',
+    one_shot: '/background_tasks/one_shot.html',
+  },
+  { debug: false },
+);
 
-// ipcMain.on('OSC_VOLTAGE_DATA', (event, args) => {
-//   mainWindow.webContents.send('OSC_VOLTAGE_DATA', args);
-// });
-
-// ipcMain.on('OSC_XY_PLOT_DATA', (event, args) => {
-//   mainWindow.webContents.send('OSC_XY_PLOT_DATA', args);
-// });
+// 2. Set up eventlisteners to bounce message from background to UI 
+ipcMain.on('PREEMPTIVE_LOOP_RESULT', (event, args) => {
+  mainWindow.webContents.send('PREEMPTIVE_LOOP_RESULT', args);
+});
+ipcMain.on('ONE_SHOT_RESULT', (event, args) => {
+  mainWindow.webContents.send('ONE_SHOT_RESULT', args);
+});

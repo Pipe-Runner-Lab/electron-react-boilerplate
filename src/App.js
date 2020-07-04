@@ -1,26 +1,35 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Home from './Home'
+
+// Electron related imports
+const electron = window.require('electron');
+const { ipcRenderer } = electron;
+const loadBalancer = window.require('electron-load-balancer');
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidMount(){
+    // 1. Starting preemptive loop as soon as app starts
+    console.log("preemptive loop started")
+    loadBalancer.start(ipcRenderer, 'preemptive_loop');
+  }
+
+  componentWillUnmount(){
+    // 2. Shutdown preemptive loop before app stops
+    loadBalancer.stop(ipcRenderer, 'preemptive_loop');
+  }
+
+  render() {
+    return (
+      <Home/>
+    );
+  }
 }
 
 export default App;

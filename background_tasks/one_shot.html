@@ -1,0 +1,48 @@
+<script>
+    const { PythonShell } = require('python-shell');
+    const { ipcRenderer } = require('electron');
+    const loadBalancer = require('electron-load-balancer');
+    const path = require('path');
+    // const { helper } = require('../utils/postProcessor.js');
+    const log = require('electron-log');
+
+    // 1. Tell PythonShell which script to run for this background task
+    let pyshell = new PythonShell(path.join(__dirname, '/../scripts/one_shot.py'), {
+        pythonPath: 'python3',
+    });
+    log.info('Python spawned:', pyshell && pyshell.command);
+
+    PROCESS_NAME = 'one_shot';
+
+    loadBalancer.job(
+        ipcRenderer,
+        PROCESS_NAME,
+        () => {
+            // 2. Hook to recieve error from python realm
+            pyshell.on('stderr', function (stderr) {
+                log.error(stderr);
+            });
+
+            // 3. Hook to recieve data from python realm
+            pyshell.on(
+                'message',
+                // 4. Setup callback to recive data from python realm
+                function (results) {
+                    log.info({ results });
+                    try {
+                        const parsedJSON = JSON.parse(results);
+
+                        // 5. Set up ipc to send result to JS via bouncing it off main process
+                        ipcRenderer.send('ONE_SHOT_RESULT', { data: parsedJSON });
+
+                    } catch (error) {
+                        log.error(error);
+                    }
+                });
+        },
+        () => {
+            // 5. Cleanup PythonShell when cleanup callback called
+            pyshell.terminate();
+        },
+    );
+</script>
