@@ -51,7 +51,7 @@
         "babel-eslint": "9.0.0",
         "concurrently": "^5.0.0",
         "devtron": "^1.4.0",
-        "electron": "^9.0.4",
+        "electron": "^11.5.0",
         "electron-builder": "^21.1.5",
         "electron-devtools-installer": "^3.0.0",
         "enzyme": "^3.9.0",
